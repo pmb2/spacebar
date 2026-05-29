@@ -1,17 +1,4 @@
 {
-    "CreateFingerprintResponse": {
-        "type": "object",
-        "properties": {
-            "fingerprint": {
-                "type": "string"
-            }
-        },
-        "additionalProperties": false,
-        "required": [
-            "fingerprint"
-        ],
-        "$schema": "http://json-schema.org/draft-07/schema#"
-    },
     "ApplicationCommandSchema": {
         "type": "object",
         "properties": {
@@ -3993,9 +3980,7 @@
                 "additionalProperties": false
             },
             "intents": {
-                "type": "number",
-                "properties": {},
-                "additionalProperties": false
+                "type": "bigint"
             },
             "presence": {
                 "$ref": "#/definitions/ActivitySchema"
@@ -4014,9 +3999,7 @@
                 "maxItems": 2,
                 "type": "array",
                 "items": {
-                    "type": "number",
-                    "properties": {},
-                    "additionalProperties": false
+                    "type": "bigint"
                 }
             },
             "guild_subscriptions": {
@@ -4626,15 +4609,15 @@
     "APIPrivateUser": {
         "type": "object",
         "properties": {
-            "email": {
-                "type": "string"
-            },
             "id": {
                 "description": "A Twitter-like snowflake, except the epoch is 2015-01-01T00:00:00.000Z\n```\nIf we have a snowflake '266241948824764416' we can represent it as binary:\n\n64                                          22     17     12          0\n 000000111011000111100001101001000101000000  00001  00000  000000000000\n      number of ms since Discord epoch       worker  pid    increment\n```",
                 "type": "string"
             },
             "flags": {
                 "type": "integer"
+            },
+            "email": {
+                "type": "string"
             },
             "banner": {
                 "type": "string"
@@ -4770,15 +4753,15 @@
             "newToken": {
                 "type": "string"
             },
-            "email": {
-                "type": "string"
-            },
             "id": {
                 "description": "A Twitter-like snowflake, except the epoch is 2015-01-01T00:00:00.000Z\n```\nIf we have a snowflake '266241948824764416' we can represent it as binary:\n\n64                                          22     17     12          0\n 000000111011000111100001101001000101000000  00001  00000  000000000000\n      number of ms since Discord epoch       worker  pid    increment\n```",
                 "type": "string"
             },
             "flags": {
                 "type": "integer"
+            },
+            "email": {
+                "type": "string"
             },
             "banner": {
                 "type": "string"
@@ -7925,6 +7908,19 @@
         "additionalProperties": false,
         "required": [
             "user_sessions"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "CreateFingerprintResponse": {
+        "type": "object",
+        "properties": {
+            "fingerprint": {
+                "type": "string"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "fingerprint"
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
     },
@@ -14337,7 +14333,7 @@
                     "length": {
                         "type": "integer"
                     },
-                    "__@unscopables@749": {
+                    "__@unscopables@822": {
                         "type": "object",
                         "additionalProperties": false,
                         "patternProperties": {
@@ -14463,17 +14459,17 @@
                             "with": {
                                 "type": "boolean"
                             },
-                            "__@iterator@747": {
+                            "__@iterator@820": {
                                 "type": "boolean"
                             },
-                            "__@unscopables@749": {
+                            "__@unscopables@822": {
                                 "type": "boolean"
                             }
                         }
                     }
                 },
                 "required": [
-                    "__@unscopables@749",
+                    "__@unscopables@822",
                     "length"
                 ]
             },

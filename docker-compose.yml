@@ -1,0 +1,51 @@
+# =============================================================================
+# Spacebar Docker Compose — Self-contained Production Stack
+# =============================================================================
+# Everything needed in one stack: postgres + spacebar.
+# Traefik is expected on the shared "backend_edge" network.
+#
+# NOTE: Spacebar runs NATIVELY on this host (port 3100) to avoid Docker WSL
+# wedging. The Docker spacebar service is commented out below. To re-enable
+# Docker-based Spacebar, uncomment the spacebar service section.
+#
+# Migration issue (2026-05-29): DB_SYNC=true + APPLY_DB_MIGRATIONS=true caused
+# TypeORM to crash on "security_keys already exists". Fixed by setting
+# APPLY_DB_MIGRATIONS=false (native) or DB_SYNC removed + APPLY_DB_MIGRATIONS=false (Docker).
+# The native PostgreSQL 16 at 127.0.0.1:5432 has all 72 migrations already run.
+# =============================================================================
+
+networks:
+  backend_edge:
+    external: true
+    name: backend_edge
+
+services:
+  # ─── Database ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: spacebar-postgres
+    restart: unless-stopped
+    stop_grace_period: 60s
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-spacebar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-spacebar}
+    volumes:
+      - spacebar_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-spacebar} -d ${POSTGRES_DB:-spacebar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - backend_edge
+    labels:
+      - "com.docker.compose.project=spacebar"
+      - "com.docker.compose.service=postgres"
+
+volumes:
+  spacebar_postgres_data:
+    driver: local
+  spacebar_uploads:
+    driver: local

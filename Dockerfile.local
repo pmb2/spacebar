@@ -1,0 +1,47 @@
+# =============================================================================
+# Spacebar Dockerfile (local build) — Uses pre-built artifacts from the host
+# =============================================================================
+# Built by running `npm run build` on the host first, then `docker compose -f docker-compose.local.yml up -d`
+
+FROM node:20-alpine AS runtime
+
+# Install runtime system dependencies
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    vips-dev \
+    tini \
+    tzdata
+
+# Create non-root user
+RUN addgroup -S spacebar && adduser -S spacebar -G spacebar
+
+WORKDIR /app
+
+# Copy pre-built artifacts from host
+COPY dist ./dist
+COPY node_modules ./node_modules
+COPY assets ./assets
+COPY config.json ./config.json
+COPY config.production.json ./config.production.json
+COPY locales ./locales/
+
+# Create data directories
+RUN mkdir -p /app/data && chown -R spacebar:spacebar /app
+
+# Environment variables (with safe defaults)
+ENV NODE_ENV=production
+ENV CONFIG_PATH=/app/config.production.json
+ENV PORT=3001
+
+EXPOSE 3001
+
+# Use tini as init system for proper signal handling
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Switch to non-root user
+USER spacebar
+
+# Start the server
+CMD ["node", "--enable-source-maps", "dist/bundle/start.js"]

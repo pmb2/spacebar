@@ -102,9 +102,11 @@ router.get(
         if (!channel) throw new HTTPError("Channel not found", 404);
 
         isTextChannel(channel.type);
-        const around = req.query.around ? `${req.query.around}` : undefined;
-        const before = req.query.before ? `${req.query.before}` : undefined;
-        const after = req.query.after ? `${req.query.after}` : undefined;
+        // Only accept valid snowflake IDs
+        const isValidSnowflake = (v: unknown): v is string => typeof v === "string" && /^\d+$/.test(v);
+        const around = isValidSnowflake(req.query.around) ? req.query.around : undefined;
+        const before = isValidSnowflake(req.query.before) ? req.query.before : undefined;
+        const after = isValidSnowflake(req.query.after) ? req.query.after : undefined;
         const limit = Number(req.query.limit) || 50;
         if (limit < 1 || limit > 100) throw new HTTPError("limit must be between 1 and 100", 422);
 

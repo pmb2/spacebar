@@ -248,7 +248,7 @@ export class Message extends BaseClass {
             .filter((msg) => [MessageType.REPLY, MessageType.THREAD_STARTER_MESSAGE, MessageType.CONTEXT_MENU_COMMAND].includes(msg.type));
         if (!ms.length) return;
         const curMs = new Map(messages.map((m) => [m.id, m] as const));
-        const neededIds = new Set(ms.map((m) => m.message_reference!.message_id as string)).difference(curMs);
+        const neededIds = new Set(ms.map((m) => m.message_reference!.message_id as string).filter((id) => !curMs.has(id)));
         if (neededIds.size) {
             const newMessages = await Message.find({
                 where: {

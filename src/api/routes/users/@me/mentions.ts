@@ -40,7 +40,8 @@ router.get(
         const limit = req.query.limit && !isNaN(Number(req.query.limit)) ? Number(req.query.limit) : 25;
         const everyone = req.query.everyone !== undefined ? Boolean(req.query.everyone) : true;
         const roles = req.query.roles !== undefined ? Boolean(req.query.roles) : true;
-        const before = req.query.before !== undefined ? String(req.query.before as string) : undefined;
+        // Only accept valid snowflake IDs
+        const before = typeof req.query.before === "string" && /^\d+$/.test(req.query.before) ? req.query.before : undefined;
         const guild_id = req.query.guild_id !== undefined ? req.query.guild_id : undefined;
 
         const user = req.user;

@@ -3,4 +3,6 @@
 cd "$(dirname "$0")"
 export $(grep -v '^\s*#' .env | xargs)
 export DATABASE="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@127.0.0.1:5432/${POSTGRES_DB:-spacebar}"
+export CONFIG_PATH="${CONFIG_PATH:-$(pwd)/config.production.json}"
+export PORT="${PORT:-3100}"
 exec node --enable-source-maps dist/bundle/start.js

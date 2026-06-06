@@ -72,7 +72,7 @@
             "maxName": 32
         },
         "rate": {
-            "enabled": true,
+            "enabled": false,
             "ip": {
                 "count": 500,
                 "window": 5
@@ -100,12 +100,12 @@
                 },
                 "auth": {
                     "login": {
-                        "count": 5,
-                        "window": 60
+                        "count": 9999,
+                        "window": 1
                     },
                     "register": {
-                        "count": 2,
-                        "window": 43200
+                        "count": 9999,
+                        "window": 1
                     }
                 }
             },
@@ -168,7 +168,7 @@
         "email": {
             "required": false,
             "allowlist": false,
-            "blocklist": true,
+            "blocklist": false,
             "domains": []
         },
         "dateOfBirth": {
@@ -177,7 +177,7 @@
         },
         "password": {
             "required": true,
-            "minLength": 8,
+            "minLength": 1,
             "minNumbers": 0,
             "minUpperCase": 0,
             "minSymbols": 0
@@ -187,7 +187,7 @@
         "requireInvite": false,
         "guestsRequireInvite": true,
         "allowNewRegistration": true,
-        "allowMultipleAccounts": false,
+        "allowMultipleAccounts": true,
         "blockIpDataCoThreatTypes": [
             "tor",
             "icloud_relay",

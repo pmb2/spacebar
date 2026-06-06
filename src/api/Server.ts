@@ -154,8 +154,9 @@ export class SpacebarServer extends Server {
 
         // current well-known location
         app.get("/.well-known/spacebar", (req, res) => {
+            const apiBase = Config.get().api.endpointPublic?.replace(/\/+$/, "") || "";
             res.json({
-                api: (Config.get().api.endpointPublic + "/api/").replace("//api/", "/api/"),
+                api: apiBase,
             });
         });
 

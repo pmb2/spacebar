@@ -46,12 +46,14 @@ router.post(
         const channel = await Channel.findOneOrFail({
             where: { id: channel_id },
         });
-        if (!channel.guild_id) throw new HTTPError("Can't bulk delete dm channel messages", 400);
-
         const rights = await getRights(req.user_id);
-        rights.hasThrow("SELF_DELETE_MESSAGES");
-
         const superuser = rights.has("MANAGE_MESSAGES");
+
+        if (!channel.guild_id && !superuser) {
+            throw new HTTPError("Can't bulk delete dm channel messages", 400);
+        }
+
+        rights.hasThrow("SELF_DELETE_MESSAGES");
         const permission = await getPermission(req.user_id, channel?.guild_id, channel_id);
 
         const { maxBulkDelete } = Config.get().limits.message;
